@@ -1,7 +1,30 @@
-import React, { useEffect } from 'react';
-import { Container, Typography, TextField, Button, Box } from '@mui/material';
+
+
+import React, { useEffect, useState } from 'react';
+import { Container, Typography, Box } from '@mui/material';
 
 function App() {
+  const [bgImage, setBgImage] = useState('/assets/pexels-goumbik-616401.jpg');
+  const images = [
+    '/assets/bg01.jpg',
+    '/assets/bg02.jpg',
+    '/assets/bg03.jpg',
+    '/assets/bg04.jpg',
+    '/assets/bg05.jpg',
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBgImage((prevImage) => {
+        const currentIndex = images.indexOf(prevImage);
+        const nextIndex = (currentIndex + 1) % images.length;
+        return images[nextIndex];
+      });
+    }, 5000); // Change image every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [images]);
+
   // Function to dynamically load the external script
   const loadScript = (src) => {
     // Check if the script is already loaded
@@ -33,13 +56,14 @@ function App() {
   return (
     <div
       style={{
-        backgroundImage: 'url(/assets/pexels-goumbik-616401.jpg)',
+        backgroundImage: `url(${bgImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         height: '100vh',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        transition: 'background-image 1s ease-in-out', // Smooth transition for background change
       }}
     >
       <Container
@@ -51,11 +75,7 @@ function App() {
           borderRadius: '10px',
         }}
       >
-        
         <img src="/assets/logo.png" alt="Logo" style={{ width: '150px', marginBottom: '20px' }} />
-        {/* <Typography variant="h2" gutterBottom>
-          Welcome to Our Website!
-        </Typography> */}
         <Typography variant="h5" gutterBottom>
           Register your interest by providing your email below:
         </Typography>
@@ -67,17 +87,17 @@ function App() {
           noValidate
           autoComplete="off"
         >
-          {/* Adding the Launchlist Widget */}
-          <div
-            className="launchlist-widget"
-            data-key-id="ocdNxw"
-            data-height="180px"
-            style={{ marginTop: '20px' }}
-          ></div>
         </Box>
+        <div
+          className="launchlist-widget"
+          data-key-id="ocdNxw"
+          data-height="180px"
+          style={{ marginTop: '20px' }}
+        ></div>
       </Container>
     </div>
   );
 }
 
 export default App;
+
